@@ -12,6 +12,9 @@ import {
 } from "react-icons/fa";
 import { toast } from "react-toastify";
 
+const API_URL =
+  (import.meta.env.VITE_API_URL || "http://localhost:5000") + "/api";
+
 const TaxReturns = () => {
   const [activeTab, setActiveTab] = useState("GST"); // 'GST' or 'INCOME'
   const [loading, setLoading] = useState(false);
@@ -64,14 +67,14 @@ const TaxReturns = () => {
   const handleDownloadReport = (type) => {
     if (type === "GST_EXCEL") {
       window.open(
-        `http://localhost:5000/api/reports/gst/excel?startDate=${gstYear}-${gstMonth}-01&endDate=${gstYear}-${gstMonth}-30`,
+        `${API_URL}/reports/gst/excel?startDate=${gstYear}-${gstMonth}-01&endDate=${gstYear}-${gstMonth}-30`,
         "_blank"
       );
     } else if (type === "PNL_EXCEL") {
       const start = `${itYear - 1}-04-01`;
       const end = `${itYear}-03-31`;
       window.open(
-        `http://localhost:5000/api/reports/pnl/excel?startDate=${start}&endDate=${end}`,
+        `${API_URL}/reports/pnl/excel?startDate=${start}&endDate=${end}`,
         "_blank"
       );
     }

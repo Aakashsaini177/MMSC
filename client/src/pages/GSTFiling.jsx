@@ -10,6 +10,9 @@ import {
 } from "react-icons/fa";
 import { toast } from "react-toastify";
 
+const API_URL =
+  (import.meta.env.VITE_API_URL || "http://localhost:5000") + "/api";
+
 const GSTFiling = () => {
   const [month, setMonth] = useState(new Date().getMonth() + 1);
   const [year, setYear] = useState(new Date().getFullYear());
@@ -18,7 +21,7 @@ const GSTFiling = () => {
 
   const fetchFilings = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/gstfilings");
+      const res = await axios.get(`${API_URL}/gstfilings`);
       setFilings(res.data);
     } catch (err) {
       console.error(err);
@@ -33,10 +36,10 @@ const GSTFiling = () => {
   const handleCalculate = async () => {
     try {
       setLoading(true);
-      const res = await axios.post(
-        "http://localhost:5000/api/gstfilings/calculate",
-        { month, year }
-      );
+      const res = await axios.post(`${API_URL}/gstfilings/calculate`, {
+        month,
+        year,
+      });
       toast.success("GST calculated for period: " + res.data.filing.period);
       fetchFilings();
     } catch (err) {
@@ -49,7 +52,7 @@ const GSTFiling = () => {
 
   const markFiled = async (id) => {
     try {
-      await axios.put(`http://localhost:5000/api/gstfilings/${id}/mark-filed`);
+      await axios.put(`${API_URL}/gstfilings/${id}/mark-filed`);
       toast.success("Marked as filed successfully");
       fetchFilings();
     } catch {
