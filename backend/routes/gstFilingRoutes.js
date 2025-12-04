@@ -1,6 +1,6 @@
 // backend/routes/gstFilingRoutes.js
 import express from "express";
-import GstFiling from "../models/GstFiling.js";
+import GstFiling from "../models/GSTFiling.js";
 import Sale from "../models/Sale.js";
 import Purchase from "../models/Purchase.js";
 
@@ -22,7 +22,7 @@ function computeTotalsFromDoc(doc, type = "sale") {
   if (Array.isArray(doc.items) && doc.items.length > 0) {
     let t = 0;
     let g = 0;
-    doc.items.forEach(item => {
+    doc.items.forEach((item) => {
       const qty = Number(item.quantity) || 0;
       const rate = Number(item.rate) || 0;
       const taxPercent = Number(item.taxPercent) || 0;
@@ -47,7 +47,8 @@ function computeTotalsFromDoc(doc, type = "sale") {
 router.post("/calculate", async (req, res) => {
   try {
     const { month, year } = req.body;
-    if (!month || !year) return res.status(400).json({ message: "month and year required" });
+    if (!month || !year)
+      return res.status(400).json({ message: "month and year required" });
 
     // build date range
     const start = new Date(year, month - 1, 1, 0, 0, 0);
@@ -55,23 +56,29 @@ router.post("/calculate", async (req, res) => {
 
     // fetch sales and purchases in the month (uses saleDate / purchaseDate fields)
     const sales = await Sale.find({
-      saleDate: { $gte: start, $lte: end }
+      saleDate: { $gte: start, $lte: end },
     }).lean();
 
     const purchases = await Purchase.find({
-      purchaseDate: { $gte: start, $lte: end }
+      purchaseDate: { $gte: start, $lte: end },
     }).lean();
 
     // accumulate totals and CGST/SGST/IGST based on states
     let totalSales = 0;
     let totalPurchases = 0;
 
-    let cgstCollected = 0, sgstCollected = 0, igstCollected = 0;
-    let cgstPaid = 0, sgstPaid = 0, igstPaid = 0;
+    let cgstCollected = 0,
+      sgstCollected = 0,
+      igstCollected = 0;
+    let cgstPaid = 0,
+      sgstPaid = 0,
+      igstPaid = 0;
 
     // Helper to get doc state: try explicit fields otherwise fallback to Rajasthan
-    const getSaleState = (s) => s.customerState || (s.customer && s.customer.state) || "Rajasthan";
-    const getPurchaseState = (p) => p.supplierState || (p.supplier && p.supplier.state) || "Rajasthan";
+    const getSaleState = (s) =>
+      s.customerState || (s.customer && s.customer.state) || "Rajasthan";
+    const getPurchaseState = (p) =>
+      p.supplierState || (p.supplier && p.supplier.state) || "Rajasthan";
 
     // Process sales
     for (const s of sales) {
@@ -106,7 +113,12 @@ router.post("/calculate", async (req, res) => {
     // Round numbers to 2 decimals
     const round = (v) => Math.round((v + Number.EPSILON) * 100) / 100;
 
-    const gstPayable = round((cgstCollected + sgstCollected + igstCollected) - (cgstPaid + sgstPaid + igstPaid));
+    const gstPayable = round(
+      cgstCollected +
+        sgstCollected +
+        igstCollected -
+        (cgstPaid + sgstPaid + igstPaid)
+    );
 
     // create period string
     const periodStr = `${String(month).padStart(2, "0")}-${year}`;
@@ -134,7 +146,12 @@ router.post("/calculate", async (req, res) => {
     res.status(200).json({ message: "GST calculated and saved", filing });
   } catch (error) {
     console.error("GST calculate error:", error);
-    res.status(500).json({ message: "Error calculating GST", error: error.message || error });
+    res
+      .status(500)
+      .json({
+        message: "Error calculating GST",
+        error: error.message || error,
+      });
   }
 });
 
@@ -144,17 +161,25 @@ router.get("/", async (req, res) => {
     const filings = await GstFiling.find().sort({ year: -1, month: -1 });
     res.json(filings);
   } catch (err) {
-    res.status(500).json({ message: "Error fetching filings", error: err.message || err });
+    res
+      .status(500)
+      .json({ message: "Error fetching filings", error: err.message || err });
   }
 });
 
 // PUT /api/gstfilings/:id/mark-filed
 router.put("/:id/mark-filed", async (req, res) => {
   try {
-    const updated = await GstFiling.findByIdAndUpdate(req.params.id, { status: "Filed", filingDate: new Date() }, { new: true });
+    const updated = await GstFiling.findByIdAndUpdate(
+      req.params.id,
+      { status: "Filed", filingDate: new Date() },
+      { new: true }
+    );
     res.json(updated);
   } catch (err) {
-    res.status(500).json({ message: "Error updating filing", error: err.message || err });
+    res
+      .status(500)
+      .json({ message: "Error updating filing", error: err.message || err });
   }
 });
 

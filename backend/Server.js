@@ -21,7 +21,12 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "https://mmsc.netlify.app"],
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use("/api/clients", clientRoutes);
 app.use("/api/gstfilings", gstFilingRoutes);
@@ -50,5 +55,5 @@ app.get("/", (req, res) => {
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(` Server started at http://localhost:${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
