@@ -1,6 +1,6 @@
 // backend/routes/gstFilingRoutes.js
 import express from "express";
-import GstFiling from "../models/GSTFiling.js";
+import GstFiling from "../models/GstFiling.js";
 import Sale from "../models/Sale.js";
 import Purchase from "../models/Purchase.js";
 
@@ -146,12 +146,10 @@ router.post("/calculate", async (req, res) => {
     res.status(200).json({ message: "GST calculated and saved", filing });
   } catch (error) {
     console.error("GST calculate error:", error);
-    res
-      .status(500)
-      .json({
-        message: "Error calculating GST",
-        error: error.message || error,
-      });
+    res.status(500).json({
+      message: "Error calculating GST",
+      error: error.message || error,
+    });
   }
 });
 

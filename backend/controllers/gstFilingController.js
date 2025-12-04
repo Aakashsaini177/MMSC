@@ -1,11 +1,13 @@
-import GSTFiling from "../models/GSTFiling.js";
+import GSTFiling from "../models/GstFiling.js";
 
 // Save a new filing
 export const createGSTFiling = async (req, res) => {
   try {
     const newFiling = new GSTFiling(req.body);
     await newFiling.save();
-    res.status(201).json({ message: "GST Filing saved successfully", filing: newFiling });
+    res
+      .status(201)
+      .json({ message: "GST Filing saved successfully", filing: newFiling });
   } catch (error) {
     res.status(500).json({ message: "Error saving filing", error });
   }
