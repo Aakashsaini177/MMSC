@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import api from "../api";
 import { toast } from "react-toastify";
@@ -16,6 +15,7 @@ const InventoryAdjustments = () => {
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Form State
   const [selectedProduct, setSelectedProduct] = useState("");
@@ -49,6 +49,7 @@ const InventoryAdjustments = () => {
       return toast.error("Please fill all fields");
     }
 
+    setIsSubmitting(true);
     try {
       const { data } = await api.post("/inventory", {
         productId: selectedProduct,
@@ -62,6 +63,8 @@ const InventoryAdjustments = () => {
       resetForm();
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to add adjustment");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -92,7 +95,7 @@ const InventoryAdjustments = () => {
         </div>
         <button
           onClick={() => setShowModal(true)}
-          className="flex items-center gap-2 bg-brand-primary text-white px-6 py-3 rounded-xl font-bold hover:bg-brand-dark transition-all shadow-lg shadow-brand-primary/30 active:scale-95"
+          className="flex items-center gap-2 bg-brand-primary text-white px-6 py-3 rounded-xl font-bold hover:bg-brand-dark transition-all shadow-lg shadow-brand-primary/30 active:scale-95 transform hover:-translate-y-0.5"
         >
           <FaPlus /> New Adjustment
         </button>
@@ -129,37 +132,40 @@ const InventoryAdjustments = () => {
             <tbody className="divide-y divide-white/10">
               {loading ? (
                 <tr>
-                  <td colSpan="5" className="px-6 py-8 text-center">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-primary mx-auto"></div>
+                  <td colSpan="5" className="px-6 py-12 text-center">
+                    <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-brand-primary mx-auto"></div>
                   </td>
                 </tr>
               ) : filteredAdjustments.length === 0 ? (
                 <tr>
                   <td
                     colSpan="5"
-                    className="px-6 py-8 text-center text-brand-dark/50"
+                    className="px-6 py-16 text-center text-brand-dark/50"
                   >
-                    No adjustments found
+                    <div className="flex flex-col items-center gap-3">
+                      <FaClipboardList className="text-4xl opacity-20" />
+                      <p>No adjustments found</p>
+                    </div>
                   </td>
                 </tr>
               ) : (
                 filteredAdjustments.map((adj) => (
                   <tr
                     key={adj._id}
-                    className="hover:bg-white/30 transition-colors"
+                    className="hover:bg-white/40 transition-colors group"
                   >
                     <td className="px-6 py-4 text-brand-dark/80 font-medium">
                       {new Date(adj.date).toLocaleDateString()}
                     </td>
-                    <td className="px-6 py-4 font-bold text-brand-dark">
+                    <td className="px-6 py-4 font-bold text-brand-dark group-hover:text-brand-primary transition-colors">
                       {adj.product?.name || "Unknown Product"}
                     </td>
                     <td className="px-6 py-4">
                       <span
-                        className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold ${
+                        className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold shadow-sm ${
                           adj.type === "increase"
-                            ? "bg-green-100 text-green-700"
-                            : "bg-red-100 text-red-700"
+                            ? "bg-emerald-100 text-emerald-700 border border-emerald-200"
+                            : "bg-rose-100 text-rose-700 border border-rose-200"
                         }`}
                       >
                         {adj.type === "increase" ? (
@@ -186,28 +192,28 @@ const InventoryAdjustments = () => {
 
       {/* Add Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg border border-white/20 animate-scale-in">
-            <div className="p-6 border-b border-gray-100 flex justify-between items-center">
-              <h2 className="text-2xl font-bold text-brand-dark">
+        <div className="fixed inset-0 bg-brand-dark/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-brand-surface/95 backdrop-blur-xl rounded-3xl shadow-2xl w-full max-w-lg border border-white/20 animate-in fade-in zoom-in duration-200">
+            <div className="p-6 border-b border-white/10 flex justify-between items-center bg-white/50 rounded-t-3xl">
+              <h2 className="text-2xl font-extrabold text-brand-dark">
                 New Adjustment
               </h2>
               <button
                 onClick={() => setShowModal(false)}
-                className="text-gray-400 hover:text-red-500 transition-colors text-2xl"
+                className="text-brand-dark/40 hover:text-brand-dark transition-colors text-2xl leading-none"
               >
                 &times;
               </button>
             </div>
-            <form onSubmit={handleSubmit} className="p-6 space-y-4">
+            <form onSubmit={handleSubmit} className="p-8 space-y-5">
               <div>
-                <label className="block text-sm font-bold text-brand-dark mb-1">
+                <label className="block text-sm font-bold text-brand-dark mb-2">
                   Product
                 </label>
                 <select
                   value={selectedProduct}
                   onChange={(e) => setSelectedProduct(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 outline-none transition-all"
+                  className="w-full px-4 py-3 rounded-xl bg-white/50 border border-brand-light/30 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 outline-none transition-all"
                   required
                 >
                   <option value="">Select Product</option>
@@ -221,20 +227,20 @@ const InventoryAdjustments = () => {
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-bold text-brand-dark mb-1">
+                  <label className="block text-sm font-bold text-brand-dark mb-2">
                     Type
                   </label>
                   <select
                     value={type}
                     onChange={(e) => setType(e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 outline-none transition-all"
+                    className="w-full px-4 py-3 rounded-xl bg-white/50 border border-brand-light/30 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 outline-none transition-all"
                   >
                     <option value="increase">Increase Stock (+)</option>
                     <option value="decrease">Decrease Stock (-)</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-brand-dark mb-1">
+                  <label className="block text-sm font-bold text-brand-dark mb-2">
                     Quantity
                   </label>
                   <input
@@ -242,14 +248,14 @@ const InventoryAdjustments = () => {
                     min="1"
                     value={quantity}
                     onChange={(e) => setQuantity(e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 outline-none transition-all"
+                    className="w-full px-4 py-3 rounded-xl bg-white/50 border border-brand-light/30 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 outline-none transition-all"
                     required
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-brand-dark mb-1">
+                <label className="block text-sm font-bold text-brand-dark mb-2">
                   Reason
                 </label>
                 <input
@@ -257,24 +263,26 @@ const InventoryAdjustments = () => {
                   value={reason}
                   onChange={(e) => setReason(e.target.value)}
                   placeholder="e.g., Damaged, Found, Theft"
-                  className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 outline-none transition-all"
+                  className="w-full px-4 py-3 rounded-xl bg-white/50 border border-brand-light/30 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 outline-none transition-all"
                   required
                 />
               </div>
 
-              <div className="pt-4 flex gap-3">
+              <div className="pt-6 flex gap-3 border-t border-white/10">
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
-                  className="flex-1 px-4 py-3 rounded-xl font-bold text-gray-500 hover:bg-gray-100 transition-all"
+                  className="flex-1 px-4 py-3 rounded-xl font-bold text-brand-dark/70 bg-white/50 hover:bg-white border border-brand-light/20 transition-all"
+                  disabled={isSubmitting}
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 bg-brand-primary text-white px-4 py-3 rounded-xl font-bold hover:bg-brand-dark transition-all shadow-lg shadow-brand-primary/30 active:scale-95"
+                  disabled={isSubmitting}
+                  className="flex-1 bg-gradient-to-r from-brand-primary to-brand-dark text-white px-4 py-3 rounded-xl font-bold hover:shadow-lg hover:shadow-brand-primary/30 active:scale-95 transition-all disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
-                  Save Adjustment
+                  {isSubmitting ? "Saving..." : "Save Adjustment"}
                 </button>
               </div>
             </form>

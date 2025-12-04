@@ -5,6 +5,7 @@ import Sale from "../models/Sale.js";
 import { protect } from "../middleware/authMiddleware.js";
 import Product from "../models/Product.js";
 import PDFDocument from "pdfkit";
+import Settings from "../models/Settings.js";
 
 const router = express.Router();
 
@@ -153,6 +154,18 @@ router.get("/:id/invoice", async (req, res) => {
       return res.status(404).json({ message: "Sale not found" });
     }
 
+    const settings = await Settings.findOne();
+    const companyName = settings?.companyName || "MMSC Services";
+    const address = settings?.address || "";
+    const cityState = `${settings?.city || ""}, ${settings?.state || ""} - ${
+      settings?.pincode || ""
+    }`;
+    const gstin = settings?.gstin || "";
+    const terms = settings?.termsAndConditions || [
+      "Goods once sold will not be taken back.",
+      "Subject to Local Jurisdiction.",
+    ];
+
     const doc = new PDFDocument({ margin: 50 });
 
     res.setHeader("Content-Type", "application/pdf");
@@ -167,12 +180,11 @@ router.get("/:id/invoice", async (req, res) => {
     doc.fontSize(20).text("INVOICE", { align: "center" }).moveDown();
 
     // Company Info
-    doc
-      .fontSize(12)
-      .text("MMSC ramser", { align: "right" })
-      .text("New Delhi, Delhi, 110058, India.", { align: "right" })
-      .text("GSTIN: 07AAAAA0000A1Z5", { align: "right" })
-      .moveDown();
+    doc.fontSize(12).text(companyName, { align: "right" });
+    if (address) doc.text(address, { align: "right" });
+    if (cityState.trim() !== ",  -") doc.text(cityState, { align: "right" });
+    if (gstin) doc.text(`GSTIN: ${gstin}`, { align: "right" });
+    doc.moveDown();
 
     // Customer & Sale Info
     doc
@@ -233,22 +245,21 @@ router.get("/:id/invoice", async (req, res) => {
     doc.text(`SGST (9%): ${(taxAmount / 2).toFixed(2)}`, 350, y);
     doc.text(`Total Tax: ${taxAmount.toFixed(2)}`, 480, y);
 
-    // Footer / Signature / QR Placeholder
+    // Footer / Terms & Conditions
     y += 50;
     doc.fontSize(10).text("Terms & Conditions:", 50, y);
-    doc.text("1. Goods once sold will not be taken back.", 50, y + 15);
-    doc.text("2. Subject to Delhi Jurisdiction.", 50, y + 30);
+    terms.forEach((term, index) => {
+      doc.text(`${index + 1}. ${term}`, 50, y + 15 + index * 15);
+    });
 
     // QR CODE PLACEHOLDER
-    // To add a real QR code in PDF, you need to generate it as an image buffer first
-    // doc.image(qrCodeBuffer, 50, y + 60, { width: 80 });
-    doc.rect(50, y + 60, 80, 80).stroke();
-    doc.text("Scan to Pay", 60, y + 95);
+    const qrY = y + 15 + terms.length * 15 + 20;
+    doc.rect(50, qrY, 80, 80).stroke();
+    doc.text("Scan to Pay", 60, qrY + 35);
 
     // SIGNATURE PLACEHOLDER
-    // doc.image('path/to/signature.png', 400, y + 60, { width: 100 });
-    doc.text("For MMSC ramser", 400, y + 60);
-    doc.text("(Authorized Signatory)", 400, y + 130);
+    doc.text(`For ${companyName}`, 400, qrY);
+    doc.text("(Authorized Signatory)", 400, qrY + 70);
 
     doc.end();
   } catch (err) {

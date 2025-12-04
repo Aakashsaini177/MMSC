@@ -35,11 +35,27 @@ const app = express();
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://mmsc.netlify.app"],
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    origin: function (origin, callback) {
+      const allowedOrigins = [
+        "http://localhost:5173",
+        "https://mmsc.netlify.app",
+      ];
+
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
+    preflightContinue: false,
   })
 );
+
+// Handle Preflight Requests
+// app.options("*", cors()); // Removed for Express 5 compatibility
 app.use(express.json());
 app.use("/api/clients", clientRoutes);
 app.use("/api/gstfilings", gstFilingRoutes);
