@@ -43,13 +43,13 @@ const Sidebar = ({ isOpen, close }) => {
         }`}
       >
         <div
-          className="p-6 flex justify-center border-b border-white/10 cursor-pointer transition-all duration-500 ease-in-out hover:scale-105"
+          className="h-24 px-4 flex items-center justify-center border-b border-white/10 cursor-pointer transition-all duration-1000 ease-in-out hover:bg-white/5"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
           <h1
-            className={`font-extrabold text-transparent bg-clip-text bg-[linear-gradient(to_right,#F6B1CE,#1581BF,#FFD700,#3DB6B1,#CCE5CF,#F6B1CE)] animate-shine tracking-wider drop-shadow-sm transition-all duration-500 ease-in-out text-center ${
-              isHovered ? "text-lg leading-tight" : "text-3xl"
+            className={`font-extrabold tracking-wider drop-shadow-sm transition-all duration-1000 ease-in-out text-center text-transparent bg-clip-text bg-gradient-to-r from-gray-200 via-white to-gray-200 animate-shine ${
+              isHovered ? "text-lg leading-tight" : "text-4xl"
             }`}
           >
             {isHovered ? "MAHAKAL MOBILE SERVICE CENTER RAMSER" : "MMSC"}

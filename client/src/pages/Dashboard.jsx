@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 import StatsCard from "../components/StatsCard";
 import ClientTable from "../components/ClientTable";
@@ -84,16 +85,21 @@ const Dashboard = () => {
             growthText: "text-brand-primary",
           }}
         />
-        <StatsCard
-          title="Pending Sales"
-          value={`₹${stats.totalPendingSales.toLocaleString()}`}
-          icon={FaFileAlt}
-          color={{
-            bg: "bg-orange-50",
-            text: "text-orange-600",
-            growthText: "text-red-500",
-          }}
-        />
+        <Link
+          to="/sales?filter=pending"
+          className="block h-full w-full transition-transform hover:scale-[1.02]"
+        >
+          <StatsCard
+            title="Pending Sales"
+            value={`₹${stats.totalPendingSales.toLocaleString()}`}
+            icon={FaFileAlt}
+            color={{
+              bg: "bg-orange-50",
+              text: "text-orange-600",
+              growthText: "text-red-500",
+            }}
+          />
+        </Link>
         <StatsCard
           title="Total Purchases"
           value={`₹${stats.totalPurchases.toLocaleString()}`}

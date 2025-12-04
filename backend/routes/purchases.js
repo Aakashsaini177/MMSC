@@ -30,6 +30,30 @@ router.post("/", async (req, res) => {
         }
         product.stock += Number(item.quantity);
         await product.save();
+      } else if (item.itemName) {
+        // Handle manual items (no ID)
+        // Check if product exists by name (case-insensitive)
+        let product = await Product.findOne({
+          name: { $regex: new RegExp(`^${item.itemName}$`, "i") },
+        });
+
+        if (product) {
+          // Product exists, update stock and link ID
+          product.stock += Number(item.quantity);
+          await product.save();
+          item.productId = product._id;
+        } else {
+          // Create new product
+          product = new Product({
+            name: item.itemName,
+            stock: Number(item.quantity),
+            price: Number(item.rate), // Use purchase rate as initial selling price
+            description: item.description || "Auto-created from Purchase",
+            unit: "pcs",
+          });
+          await product.save();
+          item.productId = product._id;
+        }
       }
     }
 

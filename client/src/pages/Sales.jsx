@@ -28,8 +28,13 @@ const initialItem = () => ({
   isManual: false, // Controls visibility of manual input box
 });
 
+import { useLocation, useNavigate } from "react-router-dom";
+
+// ... (imports)
+
 const Sales = () => {
   const [sales, setSales] = useState([]);
+  const [filteredSales, setFilteredSales] = useState([]); // New state for filtered list
   const [products, setProducts] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [selectedSale, setSelectedSale] = useState(null);
@@ -53,15 +58,26 @@ const Sales = () => {
   const printRef = useRef();
   const handlePrint = useReactToPrint({ content: () => printRef.current });
 
+  const location = useLocation();
+  const navigate = useNavigate();
+  const queryParams = new URLSearchParams(location.search);
+  const filterType = queryParams.get("filter");
+
+  // ... (useEffect remains)
+
   useEffect(() => {
-    fetchSales();
-    fetchProducts();
-  }, []);
+    if (filterType === "pending") {
+      setFilteredSales(sales.filter((s) => (s.pendingAmount || 0) > 0));
+    } else {
+      setFilteredSales(sales);
+    }
+  }, [sales, filterType]);
 
   const fetchSales = async () => {
     try {
       const res = await api.get("/sales");
       setSales(res.data);
+      // Initial filter application handled by useEffect
     } catch (err) {
       console.error("Fetch sales error:", err);
     }
@@ -324,6 +340,14 @@ const Sales = () => {
           </p>
         </div>
         <div className="flex gap-3">
+          {filterType === "pending" && (
+            <button
+              onClick={() => navigate("/sales")}
+              className="px-4 py-3 bg-brand-primary text-white rounded-xl font-bold hover:bg-brand-dark transition-colors flex items-center gap-2 shadow-sm"
+            >
+              Show All Sales
+            </button>
+          )}
           <button
             onClick={resetForm}
             className="px-6 py-3 bg-white/50 border border-brand-light/30 text-brand-dark rounded-xl font-bold hover:bg-white transition-colors flex items-center gap-2 shadow-sm"
@@ -644,7 +668,7 @@ const Sales = () => {
               </h3>
             </div>
             <div className="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar">
-              {sales.map((s) => (
+              {filteredSales.map((s) => (
                 <div
                   key={s._id}
                   className="p-4 rounded-2xl border border-brand-light/20 bg-white/30 hover:bg-brand-lightest/50 hover:border-brand-primary/30 transition-all group relative shadow-sm"
@@ -700,7 +724,7 @@ const Sales = () => {
                   </div>
                 </div>
               ))}
-              {sales.length === 0 && (
+              {filteredSales.length === 0 && (
                 <div className="text-center text-brand-dark/40 py-12">
                   <p className="font-medium">No invoices found</p>
                 </div>
