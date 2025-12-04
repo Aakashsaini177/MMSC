@@ -1,6 +1,6 @@
 // backend/routes/gstFilingRoutes.js
 import express from "express";
-import GstFiling from "../models/GstFiling.js";
+import GstFiling from "../models/GstFilingModel.js";
 import Sale from "../models/Sale.js";
 import Purchase from "../models/Purchase.js";
 

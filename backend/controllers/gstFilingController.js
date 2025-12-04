@@ -1,4 +1,4 @@
-import GstFiling from "../models/GstFiling.js";
+import GstFiling from "../models/GstFilingModel.js";
 
 // Save a new filing
 export const createGSTFiling = async (req, res) => {
