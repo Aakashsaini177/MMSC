@@ -16,8 +16,20 @@ import gstRoutes from "./routes/gstRoutes.js";
 import taxRoutes from "./routes/taxRoutes.js";
 import settingsRoutes from "./routes/settingsRoutes.js";
 import inventoryRoutes from "./routes/inventoryRoutes.js";
+import { errorHandler } from "./middleware/errorMiddleware.js";
 
 dotenv.config();
+
+// Validate Environment Variables
+if (!process.env.MONGO_URI) {
+  console.error("FATAL ERROR: MONGO_URI is not defined.");
+  process.exit(1);
+}
+
+if (!process.env.JWT_SECRET) {
+  console.error("FATAL ERROR: JWT_SECRET is not defined.");
+  process.exit(1);
+}
 
 const app = express();
 
@@ -45,14 +57,20 @@ app.use("/api/inventory", inventoryRoutes); // New Inventory module
 app.use("/api", reportRoutes); // Prefix is /api, so /api/dashboard/stats etc.
 app.use("/uploads", express.static("uploads"));
 
-mongoose
-  .connect(process.env.MONGO_URI || "mongodb://localhost:27017/FinTaxPro")
-  .then(() => console.log(" MongoDB connected"))
-  .catch((err) => console.error(" MongoDB connection error:", err));
-
 app.get("/", (req, res) => {
   res.send(" FinTaxPro API Running");
 });
+
+// Error Handler Middleware
+app.use(errorHandler);
+
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => console.log(" MongoDB connected"))
+  .catch((err) => {
+    console.error(" MongoDB connection error:", err);
+    process.exit(1);
+  });
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
