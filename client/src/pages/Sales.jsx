@@ -63,7 +63,10 @@ const Sales = () => {
   const queryParams = new URLSearchParams(location.search);
   const filterType = queryParams.get("filter");
 
-  // ... (useEffect remains)
+  useEffect(() => {
+    fetchSales();
+    fetchProducts();
+  }, []);
 
   useEffect(() => {
     if (filterType === "pending") {
@@ -249,6 +252,8 @@ const Sales = () => {
       },
     });
     setEditingId(null);
+    setSelectedSale(null);
+    navigate("/sales"); // Clear any filters
   };
 
   const handleEdit = (sale) => {
