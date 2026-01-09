@@ -31,7 +31,11 @@ export const getProduct = async (req, res) => {
 // @route   POST /api/products
 // @access  Private
 export const createProduct = async (req, res) => {
-  const { name, sku, hsn, price, stock, unit, description } = req.body;
+  let { name, sku, hsn, price, stock, unit, description } = req.body;
+
+  // Handle empty strings for unique/sparse fields
+  if (sku === "") sku = undefined;
+  if (hsn === "") hsn = undefined;
 
   try {
     const product = await Product.create({
@@ -54,12 +58,29 @@ export const createProduct = async (req, res) => {
 // @access  Private
 export const updateProduct = async (req, res) => {
   const { id } = req.params;
+  let { name, sku, hsn, price, stock, unit, description } = req.body;
+
+  // Handle empty strings for unique/sparse fields
+  if (sku === "") sku = undefined;
+  if (hsn === "") hsn = undefined;
 
   try {
-    const product = await Product.findByIdAndUpdate(id, req.body, {
-      new: true,
-      runValidators: true,
-    });
+    const product = await Product.findByIdAndUpdate(
+      id,
+      {
+        name,
+        sku,
+        hsn,
+        price,
+        stock,
+        unit,
+        description,
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
 
     if (!product) {
       return res.status(404).json({ message: "Product not found" });

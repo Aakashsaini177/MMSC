@@ -194,7 +194,10 @@ const Header = ({ toggleSidebar }) => {
         {/* Profile */}
         <div className="flex items-center gap-3 pl-2 sm:pl-6 sm:border-l border-gray-100 dark:border-slate-700">
           <div className="text-right hidden sm:block">
-            <p className="text-sm font-bold text-gray-800 dark:text-gray-200 leading-tight">
+            <p
+              className="text-sm font-bold leading-tight"
+              style={{ color: "var(--text-primary)" }}
+            >
               {user?.username || "Admin User"}
             </p>
             <p className="text-[10px] text-brand-primary font-bold uppercase tracking-wider">
