@@ -15,6 +15,8 @@ import {
   FaCalculator,
   FaEye,
   FaDownload,
+  FaFileInvoice,
+  FaTimes,
 } from "react-icons/fa";
 
 const initialItem = () => ({
@@ -891,7 +893,7 @@ const Sales = () => {
       </div>
 
       {/* Invoice Modal */}
-      {showInvoiceModal && selectedSale && (
+      {showPrint && selectedSale && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
           <div
             className="w-full max-w-4xl h-[90vh] rounded-3xl shadow-2xl flex flex-col overflow-hidden animate-in zoom-in-95 duration-200"
@@ -920,7 +922,7 @@ const Sales = () => {
                   <FaPrint /> Print
                 </button>
                 <button
-                  onClick={() => setShowInvoiceModal(false)}
+                  onClick={() => setShowPrint(false)}
                   className="px-4 py-2 border rounded-xl font-bold hover:bg-opacity-10 transition-all"
                   style={{
                     borderColor: "var(--bg-accent)",
@@ -935,7 +937,7 @@ const Sales = () => {
             {/* Invoice Content - Scrollable */}
             <div className="flex-1 overflow-auto p-8 bg-gray-100/50">
               <div
-                ref={invoiceRef}
+                ref={printRef}
                 className="shadow-xl mx-auto max-w-[210mm] min-h-[297mm] transition-transform hover:scale-[1.01] duration-300"
                 style={{ backgroundColor: "white", color: "black" }}
               >
@@ -944,7 +946,7 @@ const Sales = () => {
                   Invoices usually need to be white for printing.
                   Text colors inside invoice should also remain standard black/dark for print.
                 */}
-                <Invoice sale={selectedSale} />
+                <SalesInvoicePrint sale={selectedSale} />
               </div>
             </div>
 
@@ -957,7 +959,7 @@ const Sales = () => {
               }}
             >
               <button
-                onClick={() => setShowInvoiceModal(false)}
+                onClick={() => setShowPrint(false)}
                 className="px-6 py-3 rounded-xl font-bold border hover:bg-opacity-50 transition-colors"
                 style={{
                   borderColor: "var(--bg-accent)",
