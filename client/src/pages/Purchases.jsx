@@ -248,7 +248,13 @@ const Purchases = () => {
 
       {/* FILTERS */}
       {showFilters && (
-        <div className="bg-brand-surface/80 backdrop-blur-xl p-6 mb-8 rounded-3xl shadow-lg border border-brand-light/20 animate-in fade-in slide-in-from-top-4 duration-200">
+        <div
+          className="p-6 mb-8 rounded-3xl shadow-lg border animate-in fade-in slide-in-from-top-4 duration-200"
+          style={{
+            backgroundColor: "var(--bg-secondary)",
+            borderColor: "var(--bg-accent)",
+          }}
+        >
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
             <div>
               <label className="block text-sm font-bold text-brand-dark mb-2">
@@ -311,10 +317,20 @@ const Purchases = () => {
         <div className="lg:col-span-2 space-y-6">
           <form
             onSubmit={handleSubmit}
-            className="bg-brand-surface/80 backdrop-blur-xl rounded-3xl shadow-lg border border-brand-light/20 p-8"
+            className="rounded-3xl shadow-lg border p-8 transition-colors duration-300"
+            style={{
+              backgroundColor: "var(--bg-secondary)",
+              borderColor: "var(--bg-accent)",
+            }}
           >
-            <h3 className="text-xl font-extrabold text-brand-dark mb-8 flex items-center gap-3">
-              <div className="p-2.5 bg-brand-lightest rounded-xl text-brand-primary shadow-sm">
+            <h3
+              className="text-xl font-extrabold mb-8 flex items-center gap-3"
+              style={{ color: "var(--text-primary)" }}
+            >
+              <div
+                className="p-2.5 rounded-xl text-brand-primary shadow-sm"
+                style={{ backgroundColor: "var(--bg-primary)" }}
+              >
                 <FaPlus />
               </div>
               {editingId ? "Edit Purchase" : "New Purchase"}
@@ -322,7 +338,10 @@ const Purchases = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
               <div>
-                <label className="block text-sm font-bold text-brand-dark mb-2">
+                <label
+                  className="block text-sm font-bold mb-2"
+                  style={{ color: "var(--text-primary)" }}
+                >
                   Supplier
                 </label>
                 <div className="relative">
@@ -331,7 +350,12 @@ const Purchases = () => {
                     required
                     value={formData.supplier}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 bg-white/50 border border-brand-light/30 rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all text-brand-dark appearance-none"
+                    className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all appearance-none"
+                    style={{
+                      backgroundColor: "var(--bg-primary)",
+                      borderColor: "var(--bg-accent)",
+                      color: "var(--text-primary)",
+                    }}
                   >
                     <option value="">Select Supplier</option>
                     {suppliers.map((s) => (
@@ -348,7 +372,10 @@ const Purchases = () => {
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-bold text-brand-dark mb-2">
+                <label
+                  className="block text-sm font-bold mb-2"
+                  style={{ color: "var(--text-primary)" }}
+                >
                   Purchase Date
                 </label>
                 <input
@@ -356,23 +383,38 @@ const Purchases = () => {
                   name="purchaseDate"
                   value={formData.purchaseDate}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 bg-white/50 border border-brand-light/30 rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all text-brand-dark"
+                  className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all"
+                  style={{
+                    backgroundColor: "var(--bg-primary)",
+                    borderColor: "var(--bg-accent)",
+                    color: "var(--text-primary)",
+                  }}
                 />
               </div>
             </div>
 
             <div className="space-y-4 mb-8">
-              <label className="block text-sm font-bold text-brand-dark">
+              <label
+                className="block text-sm font-bold"
+                style={{ color: "var(--text-primary)" }}
+              >
                 Items
               </label>
               {formData.items.map((item, index) => (
                 <div
                   key={index}
-                  className="bg-white/40 p-6 rounded-2xl border border-brand-light/20 relative group transition-all hover:shadow-md hover:bg-white/60"
+                  className="p-6 rounded-2xl border relative group transition-all hover:shadow-md"
+                  style={{
+                    backgroundColor: "var(--bg-primary)",
+                    borderColor: "var(--bg-accent)",
+                  }}
                 >
                   <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
                     <div className="md:col-span-4">
-                      <label className="text-xs text-brand-dark/60 font-bold uppercase tracking-wider mb-1 block">
+                      <label
+                        className="text-xs font-bold uppercase tracking-wider mb-1 block"
+                        style={{ color: "var(--text-secondary)" }}
+                      >
                         Item
                       </label>
                       <select
@@ -383,7 +425,12 @@ const Purchases = () => {
                         onChange={(e) =>
                           handleItemChange(index, "productId", e.target.value)
                         }
-                        className="w-full px-3 py-2.5 bg-white/70 border border-brand-light/30 rounded-xl text-sm focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none text-brand-dark"
+                        className="w-full px-3 py-2.5 border rounded-xl text-sm focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none"
+                        style={{
+                          backgroundColor: "var(--bg-secondary)",
+                          borderColor: "var(--bg-accent)",
+                          color: "var(--text-primary)",
+                        }}
                       >
                         <option value="">Select Item</option>
                         <optgroup label="In Stock">
@@ -415,7 +462,11 @@ const Purchases = () => {
                       )}
                     </div>
                     <div className="md:col-span-2">
-                      <label className="text-xs text-brand-dark/60 font-bold uppercase tracking-wider mb-1 block">
+                      {/* Inputs for Qty, Rate, Tax also need updates, simplifying for now by targetting container */}
+                      <label
+                        className="text-xs font-bold uppercase tracking-wider mb-1 block"
+                        style={{ color: "var(--text-secondary)" }}
+                      >
                         Qty
                       </label>
                       <input
@@ -425,11 +476,19 @@ const Purchases = () => {
                         onChange={(e) =>
                           handleItemChange(index, "quantity", e.target.value)
                         }
-                        className="w-full px-3 py-2.5 bg-white/70 border border-brand-light/30 rounded-xl text-sm focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none text-brand-dark"
+                        className="w-full px-3 py-2.5 border rounded-xl text-sm focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none"
+                        style={{
+                          backgroundColor: "var(--bg-secondary)",
+                          borderColor: "var(--bg-accent)",
+                          color: "var(--text-primary)",
+                        }}
                       />
                     </div>
                     <div className="md:col-span-3">
-                      <label className="text-xs text-brand-dark/60 font-bold uppercase tracking-wider mb-1 block">
+                      <label
+                        className="text-xs font-bold uppercase tracking-wider mb-1 block"
+                        style={{ color: "var(--text-secondary)" }}
+                      >
                         Rate (₹)
                       </label>
                       <input
@@ -439,11 +498,19 @@ const Purchases = () => {
                         onChange={(e) =>
                           handleItemChange(index, "rate", e.target.value)
                         }
-                        className="w-full px-3 py-2.5 bg-white/70 border border-brand-light/30 rounded-xl text-sm focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none text-brand-dark"
+                        className="w-full px-3 py-2.5 border rounded-xl text-sm focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none"
+                        style={{
+                          backgroundColor: "var(--bg-secondary)",
+                          borderColor: "var(--bg-accent)",
+                          color: "var(--text-primary)",
+                        }}
                       />
                     </div>
                     <div className="md:col-span-2">
-                      <label className="text-xs text-brand-dark/60 font-bold uppercase tracking-wider mb-1 block">
+                      <label
+                        className="text-xs font-bold uppercase tracking-wider mb-1 block"
+                        style={{ color: "var(--text-secondary)" }}
+                      >
                         Tax (%)
                       </label>
                       <input
@@ -453,7 +520,12 @@ const Purchases = () => {
                         onChange={(e) =>
                           handleItemChange(index, "taxPercent", e.target.value)
                         }
-                        className="w-full px-3 py-2.5 bg-white/70 border border-brand-light/30 rounded-xl text-sm focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none text-brand-dark"
+                        className="w-full px-3 py-2.5 border rounded-xl text-sm focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none"
+                        style={{
+                          backgroundColor: "var(--bg-secondary)",
+                          borderColor: "var(--bg-accent)",
+                          color: "var(--text-primary)",
+                        }}
                       />
                     </div>
                     <div className="md:col-span-1 flex items-end justify-center pb-1">
@@ -472,16 +544,29 @@ const Purchases = () => {
               <button
                 type="button"
                 onClick={addItem}
-                className="w-full py-3 border-2 border-dashed border-brand-light/30 rounded-2xl text-brand-dark/60 hover:border-brand-primary hover:text-brand-primary hover:bg-brand-primary/5 transition-all flex items-center justify-center gap-2 font-bold"
+                className="w-full py-3 border-2 border-dashed rounded-2xl hover:bg-brand-primary/5 transition-all flex items-center justify-center gap-2 font-bold"
+                style={{
+                  borderColor: "var(--bg-accent)",
+                  color: "var(--text-secondary)",
+                }}
               >
                 <FaPlus /> Add Another Item
               </button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 border-t border-brand-light/20 pt-8">
+            <div
+              className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8"
+              style={{
+                borderTopColor: "var(--bg-accent)",
+                borderTopWidth: "1px",
+              }}
+            >
               <div className="space-y-6">
                 <div>
-                  <label className="block text-sm font-bold text-brand-dark mb-2">
+                  <label
+                    className="block text-sm font-bold mb-2"
+                    style={{ color: "var(--text-primary)" }}
+                  >
                     Status
                   </label>
                   <div className="relative">
@@ -489,7 +574,12 @@ const Purchases = () => {
                       name="status"
                       value={formData.status}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 bg-white/50 border border-brand-light/30 rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all text-brand-dark appearance-none"
+                      className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all appearance-none"
+                      style={{
+                        backgroundColor: "var(--bg-primary)",
+                        borderColor: "var(--bg-accent)",
+                        color: "var(--text-primary)",
+                      }}
                     >
                       <option value="Pending">Pending</option>
                       <option value="Paid">Paid</option>
@@ -510,17 +600,34 @@ const Purchases = () => {
                     name="paidAmount"
                     value={formData.paidAmount}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 bg-white/50 border border-brand-light/30 rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all text-brand-dark placeholder-brand-dark/30"
+                    className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all placeholder-brand-dark/30"
                     placeholder="0.00"
+                    style={{
+                      backgroundColor: "var(--bg-primary)",
+                      borderColor: "var(--bg-accent)",
+                      color: "var(--text-primary)",
+                    }}
                   />
                 </div>
               </div>
               <div className="space-y-4 flex flex-col justify-end">
-                <div className="flex justify-between items-center pt-4 border-t border-brand-light/20">
-                  <span className="text-xl font-extrabold text-brand-dark">
+                <div
+                  className="flex justify-between items-center pt-4"
+                  style={{
+                    borderTopColor: "var(--bg-accent)",
+                    borderTopWidth: "1px",
+                  }}
+                >
+                  <span
+                    className="text-xl font-extrabold"
+                    style={{ color: "var(--text-primary)" }}
+                  >
                     Total Amount
                   </span>
-                  <span className="text-2xl font-extrabold text-brand-primary">
+                  <span
+                    className="text-2xl font-extrabold"
+                    style={{ color: "var(--brand-primary)" }}
+                  >
                     ₹{calculateTotal(formData.items)}
                   </span>
                 </div>
@@ -531,7 +638,12 @@ const Purchases = () => {
               <button
                 type="button"
                 onClick={resetForm}
-                className="px-6 py-3 bg-white/50 border border-brand-light/30 text-brand-dark rounded-xl font-bold hover:bg-white transition-colors flex items-center gap-2"
+                className="px-6 py-3 border rounded-xl font-bold hover:bg-white transition-colors flex items-center gap-2"
+                style={{
+                  backgroundColor: "var(--bg-primary)",
+                  borderColor: "var(--bg-accent)",
+                  color: "var(--text-primary)",
+                }}
               >
                 <FaUndo className="text-sm" /> Cancel
               </button>
@@ -547,9 +659,21 @@ const Purchases = () => {
 
         {/* Right Column: Recent Purchases List */}
         <div className="lg:col-span-1">
-          <div className="bg-brand-surface/80 backdrop-blur-xl rounded-3xl shadow-lg border border-brand-light/20 overflow-hidden h-full flex flex-col">
-            <div className="p-6 border-b border-brand-light/20 bg-brand-lightest/30">
-              <h3 className="font-extrabold text-brand-dark">
+          <div
+            className="rounded-3xl shadow-lg border overflow-hidden h-full flex flex-col"
+            style={{
+              backgroundColor: "var(--bg-secondary)",
+              borderColor: "var(--bg-accent)",
+            }}
+          >
+            <div
+              className="p-6 border-b"
+              style={{ borderColor: "var(--bg-accent)" }}
+            >
+              <h3
+                className="font-extrabold"
+                style={{ color: "var(--text-primary)" }}
+              >
                 Recent Purchases
               </h3>
             </div>

@@ -132,14 +132,18 @@ const Products = () => {
         <div className="flex gap-3 w-full md:w-auto">
           <div className="relative flex-1 md:w-64 group">
             <div className="absolute inset-0 bg-gradient-to-r from-brand-primary to-brand-light rounded-xl blur opacity-25 group-hover:opacity-40 transition duration-200"></div>
-            <div className="relative bg-brand-surface rounded-xl flex items-center shadow-sm">
+            <div
+              className="relative rounded-xl flex items-center shadow-sm"
+              style={{ backgroundColor: "var(--bg-secondary)" }}
+            >
               <FaSearch className="absolute left-4 text-brand-primary/60" />
               <input
                 type="text"
                 placeholder="Search products..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-11 pr-4 py-3 bg-transparent rounded-xl focus:outline-none text-brand-dark placeholder-brand-dark/40"
+                className="w-full pl-11 pr-4 py-3 bg-transparent rounded-xl focus:outline-none placeholder-opacity-50"
+                style={{ color: "var(--text-primary)" }}
               />
             </div>
           </div>
@@ -152,10 +156,19 @@ const Products = () => {
         </div>
       </div>
 
-      <div className="bg-brand-surface/80 backdrop-blur-xl rounded-3xl shadow-lg border border-brand-light/20 overflow-hidden">
+      <div
+        className="rounded-3xl shadow-lg border overflow-hidden"
+        style={{
+          backgroundColor: "var(--bg-secondary)",
+          borderColor: "var(--bg-accent)",
+        }}
+      >
         <div className="overflow-x-auto">
-          <table className="w-full text-sm text-left divide-y divide-brand-light/20">
-            <thead className="bg-brand-lightest/50">
+          <table
+            className="w-full text-sm text-left divide-y"
+            style={{ borderColor: "var(--bg-accent)" }}
+          >
+            <thead className="" style={{ backgroundColor: "var(--bg-accent)" }}>
               <tr>
                 <th className="px-6 py-4 font-bold text-brand-primary uppercase tracking-wider">
                   Product Name
@@ -190,7 +203,10 @@ const Products = () => {
                           <FaBoxOpen className="text-xl" />
                         </div>
                         <div>
-                          <p className="font-bold text-brand-dark text-base">
+                          <p
+                            className="font-bold text-base"
+                            style={{ color: "var(--text-primary)" }}
+                          >
                             {product.name}
                           </p>
                           {product.description && (
@@ -276,21 +292,40 @@ const Products = () => {
       {/* Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-brand-dark/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-brand-surface rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden animate-in fade-in zoom-in duration-200 border border-brand-light/20">
-            <div className="px-8 py-6 border-b border-brand-light/20 bg-brand-lightest/30 flex justify-between items-center">
-              <h3 className="text-xl font-extrabold text-brand-dark">
+          <div
+            className="rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden animate-in fade-in zoom-in duration-200 border"
+            style={{
+              backgroundColor: "var(--bg-secondary)",
+              borderColor: "var(--bg-accent)",
+            }}
+          >
+            <div
+              className="px-8 py-6 border-b flex justify-between items-center"
+              style={{
+                backgroundColor: "var(--bg-primary)",
+                borderColor: "var(--bg-accent)",
+              }}
+            >
+              <h3
+                className="text-xl font-extrabold"
+                style={{ color: "var(--text-primary)" }}
+              >
                 {editingProduct ? "Edit Product" : "Add New Product"}
               </h3>
               <button
                 onClick={() => setShowModal(false)}
-                className="text-brand-dark/40 hover:text-brand-dark text-2xl leading-none transition-colors"
+                className="text-2xl leading-none transition-colors opacity-50 hover:opacity-100"
+                style={{ color: "var(--text-primary)" }}
               >
                 &times;
               </button>
             </div>
             <form onSubmit={handleSubmit} className="p-8 space-y-6">
               <div>
-                <label className="block text-sm font-bold text-brand-dark mb-2">
+                <label
+                  className="block text-sm font-bold mb-2"
+                  style={{ color: "var(--text-primary)" }}
+                >
                   Product Name
                 </label>
                 <input
@@ -300,7 +335,12 @@ const Products = () => {
                   onChange={handleInputChange}
                   required
                   list="predefined-items"
-                  className="w-full px-4 py-3 bg-white/50 border border-brand-light/30 rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all text-brand-dark placeholder-brand-dark/30"
+                  className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all placeholder-opacity-30"
+                  style={{
+                    backgroundColor: "var(--bg-primary)",
+                    borderColor: "var(--bg-accent)",
+                    color: "var(--text-primary)",
+                  }}
                   placeholder="e.g. LED Monitor"
                 />
                 <datalist id="predefined-items">
@@ -312,9 +352,12 @@ const Products = () => {
 
               <div className="grid grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-bold text-brand-dark mb-2">
+                  <label
+                    className="block text-sm font-bold mb-2"
+                    style={{ color: "var(--text-primary)" }}
+                  >
                     SKU{" "}
-                    <span className="text-brand-dark/40 font-normal text-xs">
+                    <span className="font-normal text-xs opacity-50">
                       (Optional)
                     </span>
                   </label>
@@ -323,14 +366,22 @@ const Products = () => {
                     name="sku"
                     value={formData.sku}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 bg-white/50 border border-brand-light/30 rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all text-brand-dark placeholder-brand-dark/30"
+                    className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all placeholder-opacity-30"
+                    style={{
+                      backgroundColor: "var(--bg-primary)",
+                      borderColor: "var(--bg-accent)",
+                      color: "var(--text-primary)",
+                    }}
                     placeholder="Stock Keeping Unit"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-brand-dark mb-2">
+                  <label
+                    className="block text-sm font-bold mb-2"
+                    style={{ color: "var(--text-primary)" }}
+                  >
                     HSN Code{" "}
-                    <span className="text-brand-dark/40 font-normal text-xs">
+                    <span className="font-normal text-xs opacity-50">
                       (Optional)
                     </span>
                   </label>
@@ -339,7 +390,12 @@ const Products = () => {
                     name="hsn"
                     value={formData.hsn}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 bg-white/50 border border-brand-light/30 rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all text-brand-dark placeholder-brand-dark/30"
+                    className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all placeholder-opacity-30"
+                    style={{
+                      backgroundColor: "var(--bg-primary)",
+                      borderColor: "var(--bg-accent)",
+                      color: "var(--text-primary)",
+                    }}
                     placeholder="HSN Code"
                   />
                 </div>
@@ -347,7 +403,10 @@ const Products = () => {
 
               <div className="grid grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-sm font-bold text-brand-dark mb-2">
+                  <label
+                    className="block text-sm font-bold mb-2"
+                    style={{ color: "var(--text-primary)" }}
+                  >
                     Price (₹)
                   </label>
                   <input
@@ -357,12 +416,20 @@ const Products = () => {
                     onChange={handleInputChange}
                     required
                     min="0"
-                    className="w-full px-4 py-3 bg-white/50 border border-brand-light/30 rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all text-brand-dark placeholder-brand-dark/30"
+                    className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all placeholder-opacity-30"
+                    style={{
+                      backgroundColor: "var(--bg-primary)",
+                      borderColor: "var(--bg-accent)",
+                      color: "var(--text-primary)",
+                    }}
                     placeholder="0.00"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-brand-dark mb-2">
+                  <label
+                    className="block text-sm font-bold mb-2"
+                    style={{ color: "var(--text-primary)" }}
+                  >
                     Stock
                   </label>
                   <input
@@ -372,19 +439,32 @@ const Products = () => {
                     onChange={handleInputChange}
                     required
                     min="0"
-                    className="w-full px-4 py-3 bg-white/50 border border-brand-light/30 rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all text-brand-dark placeholder-brand-dark/30"
+                    className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all placeholder-opacity-30"
+                    style={{
+                      backgroundColor: "var(--bg-primary)",
+                      borderColor: "var(--bg-accent)",
+                      color: "var(--text-primary)",
+                    }}
                     placeholder="0"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-brand-dark mb-2">
+                  <label
+                    className="block text-sm font-bold mb-2"
+                    style={{ color: "var(--text-primary)" }}
+                  >
                     Unit
                   </label>
                   <select
                     name="unit"
                     value={formData.unit}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 bg-white/50 border border-brand-light/30 rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all text-brand-dark"
+                    className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all"
+                    style={{
+                      backgroundColor: "var(--bg-primary)",
+                      borderColor: "var(--bg-accent)",
+                      color: "var(--text-primary)",
+                    }}
                   >
                     <option value="pcs">pcs</option>
                     <option value="kg">kg</option>
@@ -396,7 +476,10 @@ const Products = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-brand-dark mb-2">
+                <label
+                  className="block text-sm font-bold mb-2"
+                  style={{ color: "var(--text-primary)" }}
+                >
                   Description
                 </label>
                 <textarea
@@ -404,16 +487,29 @@ const Products = () => {
                   value={formData.description}
                   onChange={handleInputChange}
                   rows="3"
-                  className="w-full px-4 py-3 bg-white/50 border border-brand-light/30 rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all resize-none text-brand-dark placeholder-brand-dark/30"
+                  className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all resize-none placeholder-opacity-30"
+                  style={{
+                    backgroundColor: "var(--bg-primary)",
+                    borderColor: "var(--bg-accent)",
+                    color: "var(--text-primary)",
+                  }}
                   placeholder="Add product details..."
                 ></textarea>
               </div>
 
-              <div className="flex justify-end gap-3 pt-6 border-t border-brand-light/20">
+              <div
+                className="flex justify-end gap-3 pt-6 border-t"
+                style={{ borderColor: "var(--bg-accent)" }}
+              >
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
-                  className="px-6 py-2.5 text-brand-dark bg-white/50 border border-brand-light/30 hover:bg-white rounded-xl transition-colors font-bold"
+                  className="px-6 py-2.5 border rounded-xl transition-colors font-bold hover:opacity-80"
+                  style={{
+                    backgroundColor: "var(--bg-primary)",
+                    borderColor: "var(--bg-accent)",
+                    color: "var(--text-primary)",
+                  }}
                 >
                   Cancel
                 </button>

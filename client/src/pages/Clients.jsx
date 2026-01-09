@@ -114,14 +114,21 @@ const Clients = () => {
         <div className="flex gap-3 w-full md:w-auto">
           <div className="relative flex-1 md:w-64 group">
             <div className="absolute inset-0 bg-gradient-to-r from-brand-primary to-brand-light rounded-xl blur opacity-25 group-hover:opacity-40 transition duration-200"></div>
-            <div className="relative bg-brand-surface rounded-xl flex items-center shadow-sm">
+            <div
+              className="relative bg-brand-surface rounded-xl flex items-center shadow-sm"
+              style={{ backgroundColor: "var(--bg-secondary)" }}
+            >
               <FaSearch className="absolute left-4 text-brand-primary/60" />
               <input
                 type="text"
                 placeholder="Search clients..."
-                className="w-full pl-11 pr-4 py-3 bg-transparent rounded-xl focus:outline-none text-brand-dark placeholder-brand-dark/40"
+                className="w-full pl-11 pr-4 py-3 bg-transparent rounded-xl focus:outline-none placeholder-opacity-50"
+                style={{ color: "var(--text-primary)" }}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
+                // Debouncing handled by useEffect dependency for filtering if needed,
+                // but for simple client-side filtering on small lists, direct update is often acceptable.
+                // However, let's keep it responsive.
               />
             </div>
           </div>
@@ -137,10 +144,19 @@ const Clients = () => {
         </div>
       </div>
 
-      <div className="bg-brand-surface/80 backdrop-blur-xl rounded-3xl shadow-lg border border-brand-light/20 overflow-hidden">
+      <div
+        className="rounded-3xl shadow-lg border overflow-hidden"
+        style={{
+          backgroundColor: "var(--bg-secondary)",
+          borderColor: "var(--bg-accent)",
+        }}
+      >
         <div className="overflow-x-auto">
-          <table className="min-w-full text-sm text-left divide-y divide-brand-light/20">
-            <thead className="bg-brand-lightest/50">
+          <table
+            className="min-w-full text-sm text-left divide-y"
+            style={{ borderColor: "var(--bg-accent)" }}
+          >
+            <thead className="" style={{ backgroundColor: "var(--bg-accent)" }}>
               <tr>
                 <th className="px-6 py-4 font-bold text-brand-primary uppercase tracking-wider">
                   Client Details
@@ -167,14 +183,26 @@ const Clients = () => {
                 >
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-primary to-brand-dark text-white flex items-center justify-center font-bold text-lg shadow-md group-hover:scale-110 transition-transform">
+                      <div
+                        className="w-12 h-12 rounded-xl flex items-center justify-center font-bold text-lg shadow-md group-hover:scale-110 transition-transform"
+                        style={{
+                          backgroundColor: "var(--brand-primary)",
+                          color: "var(--bg-primary)",
+                        }}
+                      >
                         {client.name.charAt(0).toUpperCase()}
                       </div>
                       <div>
-                        <p className="font-bold text-brand-dark text-base">
+                        <p
+                          className="font-bold text-base"
+                          style={{ color: "var(--text-primary)" }}
+                        >
                           {client.name}
                         </p>
-                        <p className="text-xs text-brand-dark/60">
+                        <p
+                          className="text-xs"
+                          style={{ color: "var(--text-secondary)" }}
+                        >
                           {client.address || "No address"}
                         </p>
                       </div>
@@ -260,26 +288,50 @@ const Clients = () => {
       {/* Add/Edit Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-brand-dark/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-brand-surface rounded-3xl shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200 border border-brand-light/20">
-            <div className="px-8 py-6 border-b border-brand-light/20 bg-brand-lightest/30 flex justify-between items-center">
-              <h3 className="text-xl font-extrabold text-brand-dark">
+          <div
+            className="rounded-3xl shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200 border"
+            style={{
+              backgroundColor: "var(--bg-secondary)",
+              borderColor: "var(--bg-accent)",
+            }}
+          >
+            <div
+              className="px-8 py-6 border-b flex justify-between items-center"
+              style={{
+                backgroundColor: "var(--bg-primary)",
+                borderColor: "var(--bg-accent)",
+              }}
+            >
+              <h3
+                className="text-xl font-extrabold"
+                style={{ color: "var(--text-primary)" }}
+              >
                 {selectedClient ? "Edit Client" : "Add New Client"}
               </h3>
               <button
                 onClick={() => setShowModal(false)}
-                className="text-brand-dark/40 hover:text-brand-dark text-2xl leading-none transition-colors"
+                className="text-2xl leading-none transition-colors opacity-50 hover:opacity-100"
+                style={{ color: "var(--text-primary)" }}
               >
                 &times;
               </button>
             </div>
             <form onSubmit={handleSave} className="p-8 space-y-5">
               <div>
-                <label className="block text-sm font-bold text-brand-dark mb-2">
+                <label
+                  className="block text-sm font-bold mb-2"
+                  style={{ color: "var(--text-primary)" }}
+                >
                   Client Name
                 </label>
                 <input
                   type="text"
-                  className="w-full px-4 py-3 bg-white/50 border border-brand-light/30 rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all text-brand-dark placeholder-brand-dark/30"
+                  className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all placeholder-opacity-30"
+                  style={{
+                    backgroundColor: "var(--bg-primary)",
+                    borderColor: "var(--bg-accent)",
+                    color: "var(--text-primary)",
+                  }}
                   value={formData.name}
                   onChange={(e) =>
                     setFormData({ ...formData, name: e.target.value })
@@ -290,12 +342,20 @@ const Clients = () => {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-bold text-brand-dark mb-2">
+                  <label
+                    className="block text-sm font-bold mb-2"
+                    style={{ color: "var(--text-primary)" }}
+                  >
                     Email
                   </label>
                   <input
                     type="email"
-                    className="w-full px-4 py-3 bg-white/50 border border-brand-light/30 rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all text-brand-dark placeholder-brand-dark/30"
+                    className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all placeholder-opacity-30"
+                    style={{
+                      backgroundColor: "var(--bg-primary)",
+                      borderColor: "var(--bg-accent)",
+                      color: "var(--text-primary)",
+                    }}
                     value={formData.email}
                     onChange={(e) =>
                       setFormData({ ...formData, email: e.target.value })
@@ -304,12 +364,20 @@ const Clients = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-brand-dark mb-2">
+                  <label
+                    className="block text-sm font-bold mb-2"
+                    style={{ color: "var(--text-primary)" }}
+                  >
                     Phone
                   </label>
                   <input
                     type="text"
-                    className="w-full px-4 py-3 bg-white/50 border border-brand-light/30 rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all text-brand-dark placeholder-brand-dark/30"
+                    className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all placeholder-opacity-30"
+                    style={{
+                      backgroundColor: "var(--bg-primary)",
+                      borderColor: "var(--bg-accent)",
+                      color: "var(--text-primary)",
+                    }}
                     value={formData.phone}
                     onChange={(e) =>
                       setFormData({ ...formData, phone: e.target.value })
@@ -319,12 +387,20 @@ const Clients = () => {
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-bold text-brand-dark mb-2">
+                <label
+                  className="block text-sm font-bold mb-2"
+                  style={{ color: "var(--text-primary)" }}
+                >
                   GST Number
                 </label>
                 <input
                   type="text"
-                  className="w-full px-4 py-3 bg-white/50 border border-brand-light/30 rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all text-brand-dark placeholder-brand-dark/30"
+                  className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all placeholder-opacity-30"
+                  style={{
+                    backgroundColor: "var(--bg-primary)",
+                    borderColor: "var(--bg-accent)",
+                    color: "var(--text-primary)",
+                  }}
                   value={formData.gstNumber}
                   onChange={(e) =>
                     setFormData({ ...formData, gstNumber: e.target.value })
@@ -333,11 +409,19 @@ const Clients = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-bold text-brand-dark mb-2">
+                <label
+                  className="block text-sm font-bold mb-2"
+                  style={{ color: "var(--text-primary)" }}
+                >
                   Address
                 </label>
                 <textarea
-                  className="w-full px-4 py-3 bg-white/50 border border-brand-light/30 rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all resize-none text-brand-dark placeholder-brand-dark/30"
+                  className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all resize-none placeholder-opacity-30"
+                  style={{
+                    backgroundColor: "var(--bg-primary)",
+                    borderColor: "var(--bg-accent)",
+                    color: "var(--text-primary)",
+                  }}
                   value={formData.address}
                   onChange={(e) =>
                     setFormData({ ...formData, address: e.target.value })
@@ -346,11 +430,19 @@ const Clients = () => {
                   placeholder="Full address"
                 />
               </div>
-              <div className="flex justify-end gap-3 pt-6 border-t border-brand-light/20">
+              <div
+                className="flex justify-end gap-3 pt-6 border-t"
+                style={{ borderColor: "var(--bg-accent)" }}
+              >
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
-                  className="px-6 py-2.5 text-brand-dark bg-white/50 border border-brand-light/30 hover:bg-white rounded-xl transition-colors font-bold"
+                  className="px-6 py-2.5 border rounded-xl transition-colors font-bold hover:opacity-80"
+                  style={{
+                    backgroundColor: "var(--bg-primary)",
+                    borderColor: "var(--bg-accent)",
+                    color: "var(--text-primary)",
+                  }}
                 >
                   Cancel
                 </button>

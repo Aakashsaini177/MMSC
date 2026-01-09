@@ -9,37 +9,46 @@ import Client from "../models/Client.js";
 // @access  Private
 export const getDashboardStats = async (req, res) => {
   try {
-    // 1. Total Sales
-    const sales = await Sale.find();
-    const totalSales = sales.reduce(
-      (acc, sale) => acc + (sale.totalAmount || 0),
-      0
-    );
-    const totalPendingSales = sales.reduce(
-      (acc, sale) => acc + (sale.pendingAmount || 0),
-      0
-    );
+    // 1. Total Sales & Pending (Optimized)
+    const salesStats = await Sale.aggregate([
+      {
+        $group: {
+          _id: null,
+          totalSales: { $sum: "$totalAmount" },
+          totalPending: { $sum: "$pendingAmount" },
+        },
+      },
+    ]);
+    const totalSales = salesStats[0]?.totalSales || 0;
+    const totalPendingSales = salesStats[0]?.totalPending || 0;
 
-    // 2. Total Purchases
-    const purchases = await Purchase.find();
-    const totalPurchases = purchases.reduce(
-      (acc, purchase) => acc + (purchase.totalAmount || 0),
-      0
-    );
+    // 2. Total Purchases (Optimized)
+    const purchaseStats = await Purchase.aggregate([
+      {
+        $group: {
+          _id: null,
+          totalPurchases: { $sum: "$totalAmount" },
+        },
+      },
+    ]);
+    const totalPurchases = purchaseStats[0]?.totalPurchases || 0;
 
-    // 3. Total Expenses
-    const expenses = await Expense.find();
-    const totalExpenses = expenses.reduce(
-      (acc, expense) => acc + (expense.amount || 0),
-      0
-    );
+    // 3. Total Expenses (Optimized)
+    const expenseStats = await Expense.aggregate([
+      {
+        $group: {
+          _id: null,
+          totalExpenses: { $sum: "$amount" },
+        },
+      },
+    ]);
+    const totalExpenses = expenseStats[0]?.totalExpenses || 0;
 
     // 4. Counts
     const productCount = await Product.countDocuments();
     const clientCount = await Client.countDocuments();
 
-    // 5. Profit Calculation (Simple: Sales - Purchases - Expenses)
-    // Note: This is a rough estimate. Real accounting is more complex (COGS etc).
+    // 5. Profit Calculation
     const profit = totalSales - totalPurchases - totalExpenses;
 
     // 6. Low Stock Products (Stock < 10)

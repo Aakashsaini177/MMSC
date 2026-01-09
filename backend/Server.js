@@ -16,6 +16,7 @@ import gstRoutes from "./routes/gstRoutes.js";
 import taxRoutes from "./routes/taxRoutes.js";
 import settingsRoutes from "./routes/settingsRoutes.js";
 import inventoryRoutes from "./routes/inventoryRoutes.js";
+import searchRoutes from "./routes/searchRoutes.js"; // New Search Module
 import { errorHandler } from "./middleware/errorMiddleware.js";
 
 dotenv.config();
@@ -70,6 +71,7 @@ app.use("/api/products", productRoutes);
 app.use("/api/expenses", expenseRoutes);
 app.use("/api/settings", settingsRoutes); // New Settings module
 app.use("/api/inventory", inventoryRoutes); // New Inventory module
+app.use("/api/search", searchRoutes); // Global Search
 app.use("/api", reportRoutes); // Prefix is /api, so /api/dashboard/stats etc.
 app.use("/uploads", express.static("uploads"));
 

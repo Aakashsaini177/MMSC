@@ -105,8 +105,6 @@ const Suppliers = () => {
     }
   };
 
-
-
   const handleViewLedger = async (supplier) => {
     try {
       const res = await api.get(`/suppliers/${supplier._id}/ledger`);
@@ -149,14 +147,18 @@ const Suppliers = () => {
         </div>
         <div className="relative w-full md:w-72 group">
           <div className="absolute inset-0 bg-gradient-to-r from-brand-primary to-brand-light rounded-xl blur opacity-25 group-hover:opacity-40 transition duration-200"></div>
-          <div className="relative bg-brand-surface rounded-xl flex items-center shadow-sm">
+          <div
+            className="relative rounded-xl flex items-center shadow-sm"
+            style={{ backgroundColor: "var(--bg-secondary)" }}
+          >
             <FaUserTie className="absolute left-4 text-brand-primary/60" />
             <input
               type="text"
               placeholder="Search suppliers..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-11 pr-4 py-3 bg-transparent rounded-xl focus:outline-none text-brand-dark placeholder-brand-dark/40"
+              className="w-full pl-11 pr-4 py-3 bg-transparent rounded-xl focus:outline-none placeholder-opacity-50"
+              style={{ color: "var(--text-primary)" }}
             />
           </div>
         </div>
@@ -167,10 +169,20 @@ const Suppliers = () => {
         <div className="lg:col-span-2 space-y-6">
           <form
             onSubmit={handleSubmit}
-            className="bg-brand-surface/80 backdrop-blur-xl rounded-3xl shadow-lg border border-brand-light/20 p-8"
+            className="rounded-3xl shadow-lg border p-8"
+            style={{
+              backgroundColor: "var(--bg-secondary)",
+              borderColor: "var(--bg-accent)",
+            }}
           >
-            <h3 className="text-xl font-extrabold text-brand-dark mb-8 flex items-center gap-3">
-              <div className="p-2.5 bg-brand-lightest rounded-xl text-brand-primary shadow-sm">
+            <h3
+              className="text-xl font-extrabold mb-8 flex items-center gap-3"
+              style={{ color: "var(--text-primary)" }}
+            >
+              <div
+                className="p-2.5 rounded-xl text-brand-primary shadow-sm"
+                style={{ backgroundColor: "var(--bg-primary)" }}
+              >
                 <FaUserTie />
               </div>
               {editingId ? "Edit Supplier" : "Add New Supplier"}
@@ -178,11 +190,17 @@ const Suppliers = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
               <div>
-                <label className="block text-sm font-bold text-brand-dark mb-2">
+                <label
+                  className="block text-sm font-bold mb-2"
+                  style={{ color: "var(--text-primary)" }}
+                >
                   Supplier Name
                 </label>
                 <div className="relative">
-                  <FaUserTie className="absolute left-4 top-1/2 -translate-y-1/2 text-brand-dark/30" />
+                  <FaUserTie
+                    className="absolute left-4 top-1/2 -translate-y-1/2 opacity-30"
+                    style={{ color: "var(--text-primary)" }}
+                  />
                   <input
                     type="text"
                     name="name"
@@ -190,81 +208,138 @@ const Suppliers = () => {
                     onChange={handleChange}
                     required
                     placeholder="Enter supplier name"
-                    className="w-full pl-11 pr-4 py-3 bg-white/50 border border-brand-light/30 rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all text-brand-dark placeholder-brand-dark/30"
+                    className="w-full pl-11 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all placeholder-opacity-30"
+                    style={{
+                      backgroundColor: "var(--bg-primary)",
+                      borderColor: "var(--bg-accent)",
+                      color: "var(--text-primary)",
+                    }}
                   />
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-bold text-brand-dark mb-2">
+                <label
+                  className="block text-sm font-bold mb-2"
+                  style={{ color: "var(--text-primary)" }}
+                >
                   GST Number
                 </label>
                 <div className="relative">
-                  <FaFileInvoice className="absolute left-4 top-1/2 -translate-y-1/2 text-brand-dark/30" />
+                  <FaFileInvoice
+                    className="absolute left-4 top-1/2 -translate-y-1/2 opacity-30"
+                    style={{ color: "var(--text-primary)" }}
+                  />
                   <input
                     type="text"
                     name="gstNumber"
                     value={formData.gstNumber}
                     onChange={handleChange}
                     placeholder="GSTIN"
-                    className="w-full pl-11 pr-4 py-3 bg-white/50 border border-brand-light/30 rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all text-brand-dark placeholder-brand-dark/30"
+                    className="w-full pl-11 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all placeholder-opacity-30"
+                    style={{
+                      backgroundColor: "var(--bg-primary)",
+                      borderColor: "var(--bg-accent)",
+                      color: "var(--text-primary)",
+                    }}
                   />
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-bold text-brand-dark mb-2">
+                <label
+                  className="block text-sm font-bold mb-2"
+                  style={{ color: "var(--text-primary)" }}
+                >
                   Email Address
                 </label>
                 <div className="relative">
-                  <FaEnvelope className="absolute left-4 top-1/2 -translate-y-1/2 text-brand-dark/30" />
+                  <FaEnvelope
+                    className="absolute left-4 top-1/2 -translate-y-1/2 opacity-30"
+                    style={{ color: "var(--text-primary)" }}
+                  />
                   <input
                     type="email"
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
                     placeholder="supplier@example.com"
-                    className="w-full pl-11 pr-4 py-3 bg-white/50 border border-brand-light/30 rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all text-brand-dark placeholder-brand-dark/30"
+                    className="w-full pl-11 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all placeholder-opacity-30"
+                    style={{
+                      backgroundColor: "var(--bg-primary)",
+                      borderColor: "var(--bg-accent)",
+                      color: "var(--text-primary)",
+                    }}
                   />
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-bold text-brand-dark mb-2">
+                <label
+                  className="block text-sm font-bold mb-2"
+                  style={{ color: "var(--text-primary)" }}
+                >
                   Phone Number
                 </label>
                 <div className="relative">
-                  <FaPhone className="absolute left-4 top-1/2 -translate-y-1/2 text-brand-dark/30" />
+                  <FaPhone
+                    className="absolute left-4 top-1/2 -translate-y-1/2 opacity-30"
+                    style={{ color: "var(--text-primary)" }}
+                  />
                   <input
                     type="tel"
                     name="phone"
                     value={formData.phone}
                     onChange={handleChange}
                     placeholder="Phone number"
-                    className="w-full pl-11 pr-4 py-3 bg-white/50 border border-brand-light/30 rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all text-brand-dark placeholder-brand-dark/30"
+                    className="w-full pl-11 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all placeholder-opacity-30"
+                    style={{
+                      backgroundColor: "var(--bg-primary)",
+                      borderColor: "var(--bg-accent)",
+                      color: "var(--text-primary)",
+                    }}
                   />
                 </div>
               </div>
               <div className="md:col-span-2">
-                <label className="block text-sm font-bold text-brand-dark mb-2">
+                <label
+                  className="block text-sm font-bold mb-2"
+                  style={{ color: "var(--text-primary)" }}
+                >
                   Address
                 </label>
                 <div className="relative">
-                  <FaMapMarkerAlt className="absolute left-4 top-4 text-brand-dark/30" />
+                  <FaMapMarkerAlt
+                    className="absolute left-4 top-4 opacity-30"
+                    style={{ color: "var(--text-primary)" }}
+                  />
                   <textarea
                     name="address"
                     value={formData.address}
                     onChange={handleChange}
                     rows="3"
                     placeholder="Full address"
-                    className="w-full pl-11 pr-4 py-3 bg-white/50 border border-brand-light/30 rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all resize-none text-brand-dark placeholder-brand-dark/30"
+                    className="w-full pl-11 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all resize-none placeholder-opacity-30"
+                    style={{
+                      backgroundColor: "var(--bg-primary)",
+                      borderColor: "var(--bg-accent)",
+                      color: "var(--text-primary)",
+                    }}
                   ></textarea>
                 </div>
               </div>
             </div>
 
-            <div className="flex gap-4 pt-6 border-t border-brand-light/20">
+            <div
+              className="flex gap-4 pt-6 border-t"
+              style={{ borderColor: "var(--bg-accent)" }}
+            >
               <button
                 type="button"
                 onClick={resetForm}
-                className="px-6 py-3 bg-white/50 border border-brand-light/30 text-brand-dark rounded-xl font-bold hover:bg-white transition-colors flex items-center gap-2"
+                className="px-6 py-3 border rounded-xl font-bold hover:bg-white transition-colors flex items-center gap-2"
+                style={{
+                  backgroundColor: "var(--bg-primary)",
+                  borderColor: "var(--bg-accent)",
+                  color: "var(--text-primary)",
+                }}
               >
                 <FaUndo className="text-sm" /> Reset
               </button>
@@ -280,10 +355,34 @@ const Suppliers = () => {
 
         {/* Right Column: List */}
         <div className="lg:col-span-1">
-          <div className="bg-brand-surface/80 backdrop-blur-xl rounded-3xl shadow-lg border border-brand-light/20 overflow-hidden h-full flex flex-col">
-            <div className="p-6 border-b border-brand-light/20 bg-brand-lightest/30 flex justify-between items-center">
-              <h3 className="font-extrabold text-brand-dark">Suppliers List</h3>
-              <span className="bg-brand-primary/10 text-brand-primary text-xs px-3 py-1 rounded-full font-bold border border-brand-primary/20">
+          <div
+            className="rounded-3xl shadow-lg border overflow-hidden h-full flex flex-col"
+            style={{
+              backgroundColor: "var(--bg-secondary)",
+              borderColor: "var(--bg-accent)",
+            }}
+          >
+            <div
+              className="p-6 border-b flex justify-between items-center"
+              style={{
+                backgroundColor: "var(--bg-primary)",
+                borderColor: "var(--bg-accent)",
+              }}
+            >
+              <h3
+                className="font-extrabold"
+                style={{ color: "var(--text-primary)" }}
+              >
+                Suppliers List
+              </h3>
+              <span
+                className="text-xs px-3 py-1 rounded-full font-bold border"
+                style={{
+                  backgroundColor: "rgba(124, 58, 237, 0.1)",
+                  color: "var(--brand-primary)",
+                  borderColor: "rgba(124, 58, 237, 0.2)",
+                }}
+              >
                 {filteredSuppliers.length} Total
               </span>
             </div>
@@ -372,7 +471,10 @@ const Suppliers = () => {
                   <FaBook className="text-xl" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-extrabold text-brand-dark">
+                  <h3
+                    className="text-xl font-extrabold"
+                    style={{ color: "var(--text-primary)" }}
+                  >
                     {selectedSupplier?.name}
                   </h3>
                   <p className="text-xs text-brand-dark/60 font-bold uppercase tracking-wider">
@@ -399,7 +501,10 @@ const Suppliers = () => {
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="text-4xl font-extrabold text-brand-dark">
+                  <p
+                    className="text-4xl font-extrabold"
+                    style={{ color: "var(--text-primary)" }}
+                  >
                     ₹{ledgerData.totalPending?.toFixed(2)}
                   </p>
                   <span className="text-xs font-bold text-rose-600 bg-rose-50 px-3 py-1 rounded-full border border-rose-100 mt-2 inline-block">
@@ -439,7 +544,10 @@ const Suppliers = () => {
                       <td className="px-8 py-4 text-brand-dark/70 font-medium">
                         {new Date(entry.date).toLocaleDateString()}
                       </td>
-                      <td className="px-8 py-4 font-bold text-brand-dark">
+                      <td
+                        className="px-8 py-4 font-bold"
+                        style={{ color: "var(--text-primary)" }}
+                      >
                         {entry.description}
                       </td>
                       <td className="px-8 py-4 text-right text-rose-600 font-bold">
@@ -448,7 +556,10 @@ const Suppliers = () => {
                       <td className="px-8 py-4 text-right text-emerald-600 font-bold">
                         {entry.debit > 0 ? `₹${entry.debit.toFixed(2)}` : "-"}
                       </td>
-                      <td className="px-8 py-4 text-right font-extrabold text-brand-dark">
+                      <td
+                        className="px-8 py-4 text-right font-extrabold"
+                        style={{ color: "var(--text-primary)" }}
+                      >
                         ₹{entry.balance.toFixed(2)}
                       </td>
                     </tr>

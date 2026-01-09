@@ -251,7 +251,10 @@ const Documents = () => {
 
                     <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-all translate-x-4 group-hover:translate-x-0">
                       <a
-                        href={`http://localhost:5000/uploads/${doc.filePath}`}
+                        href={`${
+                          import.meta.env.VITE_API_URL ||
+                          "http://localhost:5000"
+                        }/uploads/${doc.filePath}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="p-2.5 text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-colors"

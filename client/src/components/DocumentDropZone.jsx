@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import api from "../api";
 
 const DocumentDropZone = () => {
   const [files, setFiles] = useState([]);
@@ -10,9 +10,9 @@ const DocumentDropZone = () => {
 
   const handleUpload = async () => {
     const formData = new FormData();
-    files.forEach(file => formData.append("file", file));
+    files.forEach((file) => formData.append("file", file));
     try {
-      await axios.post("http://localhost:5000/api/documents", formData);
+      await api.post("/documents", formData);
       alert("Uploaded successfully");
     } catch (err) {
       alert("Upload failed");
@@ -22,8 +22,18 @@ const DocumentDropZone = () => {
   return (
     <div className="border-2 border-dashed border-gray-300 p-8 rounded-lg text-center">
       <p className="mb-4 text-gray-600">Drag & drop files here</p>
-      <input type="file" multiple onChange={handleChange} className="mx-auto block" />
-      <button onClick={handleUpload} className="mt-4 px-4 py-2 bg-blue-600 text-white rounded">Upload</button>
+      <input
+        type="file"
+        multiple
+        onChange={handleChange}
+        className="mx-auto block"
+      />
+      <button
+        onClick={handleUpload}
+        className="mt-4 px-4 py-2 bg-blue-600 text-white rounded"
+      >
+        Upload
+      </button>
     </div>
   );
 };

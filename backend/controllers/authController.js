@@ -65,15 +65,16 @@ export const loginUser = async (req, res) => {
 
   try {
     // Check for user email
-    const user = await User.findOne({ email });
+    // Optimization: Use lean() to return a plain JS object, reducing Mongoose overhead.
+    const user = await User.findOne({ email }).lean();
 
     if (user && (await bcrypt.compare(password, user.password))) {
       res.json({
-        _id: user.id,
+        _id: user._id,
         username: user.username,
         email: user.email,
         role: user.role,
-        token: generateToken(user.id),
+        token: generateToken(user._id),
       });
     } else {
       res.status(400).json({ message: "Invalid credentials" });
@@ -89,7 +90,7 @@ export const loginUser = async (req, res) => {
 // @access  Private
 export const getMe = async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select("-password");
+    const user = await User.findById(req.user.id).select("-password").lean();
     res.status(200).json(user);
   } catch (error) {
     console.error(error);

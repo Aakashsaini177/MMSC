@@ -1,11 +1,18 @@
 @import "tailwindcss";
 
 @theme {
-  --color-brand-lightest: #e5f0ff;
-  --color-brand-light: #99c2ff;
-  --color-brand-primary: #0052cc;
-  --color-brand-dark: #002966;
-  --color-brand-surface: #cce0ff;
+  --color-brand-lightest: var(--bg-primary);
+  --color-brand-light: var(--bg-accent);
+  --color-brand-primary: var(--brand-primary);
+  --color-brand-dark: var(--brand-hover);
+  --color-brand-surface: var(--bg-secondary);
+
+  /* Additional mappings for semantic usage */
+  --color-bg-primary: var(--bg-primary);
+  --color-bg-secondary: var(--bg-secondary);
+  --color-bg-accent: var(--bg-accent);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
 }
 
 @tailwind base;
@@ -23,6 +30,42 @@
   /* Firefox */
   input[type="number"] {
     -moz-appearance: textfield;
+  }
+
+  body {
+    @apply transition-colors duration-300;
+  }
+
+  /* Custom Theme Palette: Sunset / Berry */
+  :root {
+    color-scheme: light;
+    /* Soft Warm Light Mode */
+    --bg-primary: #fff5f6; /* Very light warm pink tint - reduces eye strain */
+    --bg-secondary: #ffffff; /* White cards for clean contrast */
+    --bg-accent: #ffe3e8; /* Soft pink accent for hovers */
+    --text-primary: #2d2a32; /* Deep Charcoal for main text */
+    --text-secondary: #5d5a66; /* Softer grey for subtext */
+    --brand-primary: #7c3aed; /* Modern Violet (User Selected) */
+    --brand-hover: #6d28d9; /* Deep Violet for hover */
+  }
+
+  /* Dark Mode Overrides */
+  :root.dark {
+    color-scheme: dark;
+    /* Deep Indigo Dark Mode */
+    --bg-primary: #2d2b55; /* Darker Indigo for Main Background */
+    --bg-secondary: #41436a; /* The User's Indigo for Cards/Sidebar */
+    --bg-accent: #555785; /* Lighter Indigo for inputs/hovers */
+    --text-primary: #ffffff; /* White text for readability */
+    --text-secondary: #c4b5fd; /* Soft Lavender for secondary */
+    --brand-primary: #7c3aed; /* Modern Violet */
+    --brand-hover: #8b5cf6; /* Lighter Violet for hover in dark mode */
+    --brand-shimmer: rgba(124, 58, 237, 0.2);
+  }
+
+  body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
   }
 }
 
@@ -42,5 +85,16 @@
   .animate-shine {
     background-size: 200% auto;
     animation: shine 4s linear infinite;
+  }
+
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
   }
 }

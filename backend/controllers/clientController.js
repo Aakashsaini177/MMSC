@@ -5,7 +5,7 @@ import Sale from "../models/Sale.js";
 // @route   GET /api/clients
 export const getClients = async (req, res) => {
   try {
-    const clients = await Client.find().sort({ createdAt: -1 });
+    const clients = await Client.find().sort({ createdAt: -1 }).lean();
     res.json(clients);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -65,14 +65,15 @@ export const deleteClient = async (req, res) => {
 // @route   GET /api/clients/:id/ledger
 export const getClientLedger = async (req, res) => {
   try {
-    const client = await Client.findById(req.params.id);
+    const client = await Client.findById(req.params.id).lean();
     if (!client) return res.status(404).json({ message: "Client not found" });
 
-    // Find sales for this client (matching by name or email/phone if linked)
-    // Ideally, Sale model should have clientId. For now, matching by Name.
-    const sales = await Sale.find({ customerName: client.name }).sort({
-      saleDate: -1,
-    });
+    // Find sales for this client (matching by name)
+    // Optimization: Select only necessary fields and use lean()
+    const sales = await Sale.find({ customerName: client.name })
+      .select("saleDate totalAmount paidAmount pendingAmount")
+      .sort({ saleDate: -1 })
+      .lean();
 
     const ledger = sales.map((sale) => ({
       date: sale.saleDate,
