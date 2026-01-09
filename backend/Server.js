@@ -40,7 +40,6 @@ app.use(
       const allowedOrigins = [
         "http://localhost:5173",
         "https://mmsc.netlify.app",
-        "https://mmsc-ten.vercel.app",
       ];
 
       if (!origin || allowedOrigins.includes(origin)) {
